@@ -33,6 +33,22 @@ flake8 = "^6.0.0"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.flake8]
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    "*.egg-info",
+    ".venv",
+    "venv",
+    "env",
+    ".env",
+    ".tox",
+    ".pytest_cache",
+    ".mypy_cache"
+]
+
 [tool.black]
 line-length = 88
 target-version = ["py311"]
