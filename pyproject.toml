@@ -16,7 +16,7 @@ classifiers = [
 packages = [{include = "streamlit_rich_message_history"}]
 
 [tool.poetry.dependencies]
-python = ">=3.11,<4.0"
+python = ">=3.11,<3.14"
 streamlit = "^1.43.2"
 pandas = "^2.2.3"
 matplotlib = "^3.10.1"
@@ -29,6 +29,8 @@ isort = "^5.12.0"
 mypy = "^1.0.0"
 flake8 = "^6.0.0"
 flake8-pyproject = "^1.2.3"
+pandas-stubs = "^2.2.3.250308"
+plotly-stubs = "^0.0.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
