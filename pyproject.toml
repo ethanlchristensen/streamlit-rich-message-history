@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "streamlit-rich-message-history"
+version = "0.1.0"
+description = "A package for creating rich, multi-component chat messages in Streamlit"
+authors = ["Ethan Christensen <ethanlchristensen@outlook.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/ethanlchristensen/streamlit-rich-message-history"
+keywords = ["streamlit", "chat", "messages", "rich", "ui"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Programming Language :: Python :: 3.11",
+]
+packages = [{include = "streamlit_rich_message_history"}]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<4.0"
+streamlit = "^1.43.2"
+pandas = "^2.2.3"
+matplotlib = "^3.10.1"
+plotly = "^6.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.0.0"
+black = "^23.0.0"
+isort = "^5.12.0"
+mypy = "^1.0.0"
+flake8 = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ["py37", "py38", "py39", "py310"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
