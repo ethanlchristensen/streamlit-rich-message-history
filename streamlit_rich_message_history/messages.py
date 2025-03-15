@@ -120,4 +120,3 @@ class ErrorMessage(Message):
     def __init__(self, avatar: str, error_text: str):
         super().__init__(user="error", avatar=avatar)
         self.add_error(error_text)
-

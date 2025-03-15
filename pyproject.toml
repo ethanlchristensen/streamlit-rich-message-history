@@ -28,6 +28,7 @@ black = "^23.0.0"
 isort = "^5.12.0"
 mypy = "^1.0.0"
 flake8 = "^6.0.0"
+flake8-pyproject = "^1.2.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -48,6 +49,7 @@ exclude = [
     ".pytest_cache",
     ".mypy_cache"
 ]
+ignore = ["E501", "W503", "W504", "W291"]
 
 [tool.black]
 line-length = 88

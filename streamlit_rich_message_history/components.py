@@ -58,8 +58,8 @@ class MessageComponent:
         elif isinstance(content, plt.Figure):
             return ComponentType.MATPLOTLIB_FIGURE
         elif isinstance(content, go.Figure) or (
-            isinstance(content, dict)
-            and isinstance(getattr(content, "data", None), (list, tuple))
+            isinstance(content, dict) and 
+            isinstance(getattr(content, "data", None), (list, tuple))
         ):
             return ComponentType.PLOTLY_FIGURE
         elif isinstance(content, (int, float)) and not self.kwargs.get(
@@ -168,8 +168,8 @@ class MessageComponent:
                         st.code(repr(self.content), language="python")
                     else:
                         st.code(str(self.content), language="python")
-                except:
-                    st.error("Unable to display component content")
+                except Exception as e:
+                    st.error(f"Unable to display component content: {e}")
 
     def _render_collection_item(
         self, item: Any, index: Optional[Union[int, str]] = None
@@ -191,5 +191,5 @@ class MessageComponent:
             with st.expander("Item Debug View", expanded=False):
                 try:
                     st.code(repr(item), language="python")
-                except:
-                    st.error("Unable to display item content")
+                except Exception as e:
+                    st.error(f"Unable to display item content: {e}")
