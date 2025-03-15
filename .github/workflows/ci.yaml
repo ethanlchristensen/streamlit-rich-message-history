@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+    - name: Install dependencies
+      run: poetry install
+    - name: Lint with flake8
+      run: poetry run flake8
+    - name: Format check with black
+      run: poetry run black --check .
+    - name: Import sorting with isort
+      run: poetry run isort --check .
+    - name: Type check with mypy
+      run: poetry run mypy streamlit_rich_message_history
+    - name: Test with pytest
+      run: poetry run pytest
