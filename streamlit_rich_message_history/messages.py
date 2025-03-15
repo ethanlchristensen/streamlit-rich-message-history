@@ -1,5 +1,5 @@
 import traceback
-from typing import Any, Dict, List, Tuple, Union,  Optional
+from typing import Any, Dict, List, Tuple, Union, Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
