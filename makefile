@@ -43,3 +43,6 @@ clean:
 	rm -rf *.egg-info
 	find . -type d -name __pycache__ -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
+
+release:
+	poetry run python release.py
