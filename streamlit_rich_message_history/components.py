@@ -58,8 +58,8 @@ class MessageComponent:
         elif isinstance(content, plt.Figure):
             return ComponentType.MATPLOTLIB_FIGURE
         elif isinstance(content, go.Figure) or (
-            isinstance(content, dict) and 
-            isinstance(getattr(content, "data", None), (list, tuple))
+            isinstance(content, dict)
+            and isinstance(getattr(content, "data", None), (list, tuple))
         ):
             return ComponentType.PLOTLY_FIGURE
         elif isinstance(content, (int, float)) and not self.kwargs.get(
