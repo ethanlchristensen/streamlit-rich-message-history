@@ -49,17 +49,20 @@ exclude = [
     ".env",
     ".tox",
     ".pytest_cache",
-    ".mypy_cache"
+    ".mypy_cache",
+    "release.py"
 ]
 ignore = ["E501", "W503", "W504", "W291"]
 
 [tool.black]
 line-length = 88
 target-version = ["py311"]
+exclude = "release\\.py"
 
 [tool.isort]
 profile = "black"
 line_length = 88
+skip = ["release.py"]
 
 [[tool.mypy.overrides]]
 module = "plotly.*"
@@ -68,3 +71,7 @@ ignore_missing_imports = true
 [[tool.mypy.overrides]]
 module = "plotly.graph_objects.*"
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "release"
+ignore_errors = true
