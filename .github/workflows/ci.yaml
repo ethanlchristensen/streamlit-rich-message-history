@@ -30,6 +30,6 @@ jobs:
     - name: Import sorting with isort
       run: poetry run isort --check .
     - name: Type check with mypy
-      run: poetry run mypy streamlit_rich_message_history
+      run: poetry run mypy --install-types && poetry run mypy streamlit_rich_message_history
     - name: Test with pytest
       run: poetry run pytest
