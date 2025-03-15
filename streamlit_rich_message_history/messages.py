@@ -1,5 +1,5 @@
 import traceback
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union,  Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -55,7 +55,7 @@ class Message:
         """Add a number component to the message."""
         return self.add(number, **kwargs)
 
-    def add_metric(self, value: Any, label: str = None, **kwargs):
+    def add_metric(self, value: Any, label: Optional[str] = None, **kwargs):
         """Add a metric component to the message."""
         return self.add(value, is_metric=True, title=label, **kwargs)
 
@@ -102,7 +102,7 @@ class Message:
 class UserMessage(Message):
     """Convenience class for user messages."""
 
-    def __init__(self, avatar: str, text: str = None):
+    def __init__(self, avatar: str, text: Optional[str] = None):
         super().__init__(user="user", avatar=avatar)
         if text:
             self.add_text(text)

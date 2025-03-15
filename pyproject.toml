@@ -58,3 +58,11 @@ target-version = ["py311"]
 [tool.isort]
 profile = "black"
 line_length = 88
+
+[[tool.mypy.overrides]]
+module = "plotly.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "plotly.graph_objects.*"
+ignore_missing_imports = true
