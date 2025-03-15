@@ -1,4 +1,4 @@
-from streamlit_rich_message_history import MessageHistory, Message
+from streamlit_rich_message_history import Message, MessageHistory
 
 
 def test_history_add_message():

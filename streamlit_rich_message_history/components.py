@@ -1,9 +1,10 @@
-import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
-import plotly.graph_objects as go
-from typing import Any, Optional, Union
 import traceback
+from typing import Any, Optional, Union
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import plotly.graph_objects as go
+import streamlit as st
 
 from .enums import ComponentType
 

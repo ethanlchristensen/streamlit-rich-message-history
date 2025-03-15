@@ -1,9 +1,10 @@
-import streamlit as st
-from typing import Any, List, Dict, Tuple, Union
-import pandas as pd
-import matplotlib.pyplot as plt
-import plotly.graph_objects as go
 import traceback
+from typing import Any, Dict, List, Tuple, Union
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import plotly.graph_objects as go
+import streamlit as st
 
 from .components import MessageComponent
 

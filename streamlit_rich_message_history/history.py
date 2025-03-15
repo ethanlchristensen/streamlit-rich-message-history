@@ -1,5 +1,6 @@
 from typing import List
-from .messages import Message, UserMessage, AssistantMessage, ErrorMessage
+
+from .messages import AssistantMessage, ErrorMessage, Message, UserMessage
 
 
 class MessageHistory:

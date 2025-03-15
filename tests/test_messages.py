@@ -1,4 +1,4 @@
-from streamlit_rich_message_history import Message, ComponentType
+from streamlit_rich_message_history import ComponentType, Message
 
 
 def test_message_chaining():

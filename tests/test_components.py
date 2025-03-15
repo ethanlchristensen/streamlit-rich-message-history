@@ -1,6 +1,7 @@
-import pandas as pd
 import matplotlib.pyplot as plt
-from streamlit_rich_message_history import MessageComponent, ComponentType
+import pandas as pd
+
+from streamlit_rich_message_history import ComponentType, MessageComponent
 
 
 def test_text_component_detection():
