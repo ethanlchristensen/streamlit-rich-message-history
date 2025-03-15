@@ -4,8 +4,14 @@ A Python package for creating rich, multi-component chat messages in Streamlit.
 
 ## Installation
 
+### pip
 ```bash
 pip install streamlit-rich-message-history
+```
+
+### poetry
+```bash
+poetry add streamlit-rich-message-history
 ```
 
 ## Basic Usage
