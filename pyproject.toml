@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "streamlit-rich-message-history"
 version = "0.1.5"
-description = "A package for creating rich, multi-component chat messages in Streamlit"
+description = "A package for creating rich, multi-component chat messages in Streamlit."
 authors = ["Ethan Christensen <ethanlchristensen@outlook.com>"]
 license = "MIT"
 readme = "README.md"
