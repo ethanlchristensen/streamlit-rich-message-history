@@ -1,10 +1,3 @@
-"""
-Tests for custom component functionality in streamlit_rich_message_history.
-
-This module tests the registration and usage of custom component types,
-detectors, renderers, and custom message methods.
-"""
-
 from unittest.mock import MagicMock, patch
 
 from streamlit_rich_message_history.components import MessageComponent
