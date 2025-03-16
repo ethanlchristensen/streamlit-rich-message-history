@@ -1,0 +1,67 @@
+name: Generate Sphinx Documentation
+
+# Add permissions configuration
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Environment configuration
+env:
+  PYTHON_VERSION: '3.11'
+
+# Configure GitHub Pages
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      
+    - name: Install dependencies
+      run: |
+        poetry install
+        
+    - name: Build documentation
+      run: |
+        cd docs
+        poetry run sphinx-build -M html source build -v
+        
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+      
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: docs/build/html
+        
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'  # Only deploy on push to main, not on PRs
+    steps:
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
