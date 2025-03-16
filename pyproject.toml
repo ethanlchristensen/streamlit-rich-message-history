@@ -31,6 +31,10 @@ flake8 = "^6.0.0"
 flake8-pyproject = "^1.2.3"
 pandas-stubs = "^2.2.3.250308"
 plotly-stubs = "^0.0.4"
+sphinx = "^8.2.3"
+sphinx-rtd-theme = "^3.0.2"
+sphinx-autodoc-typehints = "^3.1.0"
+myst-parser = "^4.0.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
