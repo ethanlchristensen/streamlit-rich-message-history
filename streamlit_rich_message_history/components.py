@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from .enums import ComponentType
+from .enums import ComponentType, ComponentRegistry
 
 
 class MessageComponent:
@@ -34,6 +34,13 @@ class MessageComponent:
 
     def _detect_component_type(self, content: Any) -> ComponentType:
         """Detect the appropriate component type based on content."""
+        # First try custom detectors
+        for comp_type in ComponentRegistry._type_detectors:
+            detector = ComponentRegistry.get_detector(comp_type)
+            if detector and detector(content, self.kwargs):
+                return comp_type
+
+        # Then do built-in detection logic
         if isinstance(content, (list, tuple)) and not self.kwargs.get(
             "is_table", False
         ):
@@ -91,6 +98,13 @@ class MessageComponent:
     def _render_content(self):
         """Render the component based on its detected type."""
         try:
+            # First check if there's a custom renderer
+            custom_renderer = ComponentRegistry.get_renderer(self.component_type)
+            if custom_renderer:
+                custom_renderer(self.content, self.kwargs)
+                return
+
+            # Standard component rendering
             if (
                 self.component_type == ComponentType.LIST
                 or self.component_type == ComponentType.TUPLE

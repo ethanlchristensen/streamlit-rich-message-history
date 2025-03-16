@@ -1,5 +1,5 @@
 import traceback
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union, Callable
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from .components import MessageComponent
+from .enums import ComponentType, ComponentRegistry
 
 
 class Message:
@@ -16,6 +17,8 @@ class Message:
         self.user = user
         self.avatar = avatar
         self.components: List[MessageComponent] = []
+    
+    _custom_component_methods = {}
 
     def add(self, content: Any, **kwargs):
         """Add a component to the message with automatic type detection."""
@@ -82,6 +85,18 @@ class Message:
     def add_dict(self, items: Dict[str, Any], **kwargs):
         """Add a dictionary of items to the message."""
         return self.add(items, **kwargs)
+    
+    def add_custom(self, content: Any, component_type: str, **kwargs):
+        """Add a custom component type."""
+        # Look up the component type
+        custom_type = ComponentRegistry.get_custom_type(component_type)
+        if not custom_type:
+            raise ValueError(f"Unknown custom component type: {component_type}")
+        
+        # Add the component with the specified type
+        component = MessageComponent(content, component_type=custom_type, **kwargs)
+        self.components.append(component)
+        return self
 
     def render(self):
         """Render the message with all its components."""
@@ -97,6 +112,25 @@ class Message:
                 st.error(error_message)
                 with st.expander("Stack Trace", expanded=False):
                     st.code(stack_trace, language="python")
+    
+    @classmethod
+    def register_component_method(cls, method_name: str, component_type: ComponentType, 
+                                 method_func: Optional[Callable] = None):
+        """Register a new component method for the Message class."""
+        if hasattr(cls, method_name) and method_name != "add_custom":
+            raise ValueError(f"Method '{method_name}' already exists in Message class")
+        
+        # Create a method function if not provided
+        if method_func is None:
+            def default_method(self, content, **kwargs):
+                return self.add_custom(content, component_type=component_type.value, **kwargs)
+            method_func = default_method
+        
+        # Add the method to the class
+        setattr(cls, method_name, method_func)
+        cls._custom_component_methods[method_name] = component_type
+        
+        return method_func
 
 
 class UserMessage(Message):

@@ -1,5 +1,7 @@
-from typing import List
+from typing import List, Callable, Any, Optional
 
+import streamlit as st
+from .enums import ComponentType, ComponentRegistry
 from .messages import AssistantMessage, ErrorMessage, Message, UserMessage
 
 
@@ -53,3 +55,26 @@ class MessageHistory:
     def clear(self):
         """Clear all messages from history."""
         self.messages = []
+    
+    @staticmethod
+    def register_component_type(name: str) -> ComponentType:
+        """Register a new component type."""
+        return ComponentRegistry.register_component_type(name)
+    
+    @staticmethod
+    def register_component_detector(component_type: ComponentType, 
+                                  detector: Callable[[Any, dict], bool]) -> None:
+        """Register a detector function for a component type."""
+        ComponentRegistry.register_detector(component_type, detector)
+    
+    @staticmethod
+    def register_component_renderer(component_type: ComponentType, 
+                                  renderer: Callable[[Any, dict], None]) -> None:
+        """Register a renderer function for a component type."""
+        ComponentRegistry.register_renderer(component_type, renderer)
+
+    @staticmethod
+    def register_component_method(method_name: str, component_type: ComponentType,
+                               method_func: Optional[Callable] = None) -> None:
+        """Register a new component method to the Message class."""
+        Message.register_component_method(method_name, component_type, method_func)
