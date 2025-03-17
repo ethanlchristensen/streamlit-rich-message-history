@@ -111,4 +111,4 @@ ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "release"
-ignore_errors = true
+ignore_errors = t
