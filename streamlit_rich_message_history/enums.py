@@ -73,13 +73,13 @@ class ComponentRegistry:
         Register a new component type with the given name.
         If a component type with this name already exists, returns the existing type
         with a warning instead of raising an exception.
-        
+
         Args:
             name: String identifier for the new component type
-        
+
         Returns:
             ComponentType: The newly created component type or existing component type
-        
+
         Examples:
             >>> IMAGE_TYPE = ComponentRegistry.register_component_type("image")
             >>> # IMAGE_TYPE can now be used like a standard ComponentType
@@ -88,11 +88,16 @@ class ComponentRegistry:
             >>> # A warning will be printed and SAME_IMAGE_TYPE == IMAGE_TYPE
         """
         # Check if the type already exists
-        existing_types = [t.value for t in ComponentType] + list(cls._custom_types.keys())
+        existing_types = [t.value for t in ComponentType] + list(
+            cls._custom_types.keys()
+        )
         if name in existing_types:
             import warnings
-            warnings.warn(f"Component type '{name}' already exists, returning existing type")
-            
+
+            warnings.warn(
+                f"Component type '{name}' already exists, returning existing type"
+            )
+
             # Return the existing type
             if name in cls._custom_types:
                 return cls._custom_types[name]
@@ -101,7 +106,7 @@ class ComponentRegistry:
                 for t in ComponentType:
                     if t.value == name:
                         return t
-        
+
         # Create a new ComponentType dynamically
         custom_type = object.__new__(ComponentType)
         custom_type._name_ = name.upper()
