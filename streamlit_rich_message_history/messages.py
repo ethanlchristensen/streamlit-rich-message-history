@@ -411,29 +411,34 @@ class Message:
     ):
         """
         Register a new component method for the Message class.
-
         This method dynamically adds a new add_* method to the Message class
-        for a custom component type.
+        for a custom component type. If a method with this name already exists,
+        returns the existing method with a warning instead of raising an exception.
 
         Args:
             method_name: Name of the method to add (typically 'add_xyz')
             component_type: The component type to associate with this method
             method_func: Optional custom function for the method
-                         If None, a default implementation is created
+                        If None, a default implementation is created
 
         Returns:
-            Callable: The created method function
-
-        Raises:
-            ValueError: If a method with this name already exists
+            Callable: The created or existing method function
 
         Examples:
             >>> IMAGE_TYPE = ComponentRegistry.register_component_type("image")
             >>> Message.register_component_method("add_image", IMAGE_TYPE)
             >>> # Now message.add_image() is available
+            >>> # Registering the same method again will return the existing method
+            >>> Message.register_component_method("add_image", IMAGE_TYPE)
+            >>> # A warning will be printed and the existing method will be returned
         """
         if hasattr(cls, method_name) and method_name != "add_custom":
-            raise ValueError(f"Method '{method_name}' already exists in Message class")
+            import warnings
+
+            warnings.warn(
+                f"Method '{method_name}' already exists in Message class, returning existing method"
+            )
+            return getattr(cls, method_name)
 
         # Create a method function if not provided
         if method_func is None:
@@ -448,7 +453,6 @@ class Message:
         # Add the method to the class
         setattr(cls, method_name, method_func)
         cls._custom_component_methods[method_name] = component_type
-
         return method_func
 
 

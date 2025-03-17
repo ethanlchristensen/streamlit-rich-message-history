@@ -71,28 +71,41 @@ class ComponentRegistry:
     def register_component_type(cls, name: str) -> ComponentType:
         """
         Register a new component type with the given name.
-
+        If a component type with this name already exists, returns the existing type
+        with a warning instead of raising an exception.
+        
         Args:
             name: String identifier for the new component type
-
+        
         Returns:
-            ComponentType: The newly created component type
-
-        Raises:
-            ValueError: If a component type with this name already exists
-
+            ComponentType: The newly created component type or existing component type
+        
         Examples:
             >>> IMAGE_TYPE = ComponentRegistry.register_component_type("image")
             >>> # IMAGE_TYPE can now be used like a standard ComponentType
+            >>> # Registering the same type again will return the existing type
+            >>> SAME_IMAGE_TYPE = ComponentRegistry.register_component_type("image")
+            >>> # A warning will be printed and SAME_IMAGE_TYPE == IMAGE_TYPE
         """
-        if name in [t.value for t in ComponentType] + list(cls._custom_types.keys()):
-            raise ValueError(f"Component type '{name}' already exists")
-
+        # Check if the type already exists
+        existing_types = [t.value for t in ComponentType] + list(cls._custom_types.keys())
+        if name in existing_types:
+            import warnings
+            warnings.warn(f"Component type '{name}' already exists, returning existing type")
+            
+            # Return the existing type
+            if name in cls._custom_types:
+                return cls._custom_types[name]
+            else:
+                # Find and return the enum value from ComponentType
+                for t in ComponentType:
+                    if t.value == name:
+                        return t
+        
         # Create a new ComponentType dynamically
         custom_type = object.__new__(ComponentType)
         custom_type._name_ = name.upper()
         custom_type._value_ = name
-
         cls._custom_types[name] = custom_type
         return custom_type
 
