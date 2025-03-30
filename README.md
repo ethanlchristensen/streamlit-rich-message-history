@@ -154,7 +154,7 @@ history.register_component_method("add_video", VIDEO_TYPE, custom_video_method)
 
 ## Documentation
 
-For more examples and detailed documentation, visit [our documentation site](https://your-docs-site.com).
+For more examples and detailed documentation, visit [our documentation](https://ethanlchristensen.github.io/streamlit-rich-message-history/).
 
 ## License
 
