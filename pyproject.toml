@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "streamlit-rich-message-history"
-version = "0.1.9"
+version = "0.1.10"
 description = "A package for creating rich, multi-component chat messages in Streamlit."
 authors = ["Ethan Christensen <ethanlchristensen@outlook.com>"]
 license = "MIT"
@@ -22,6 +22,7 @@ pandas = "^2.2.3"
 matplotlib = "^3.10.1"
 plotly = "^6.0.0"
 furo = "^2024.8.6"
+roman-numerals-py = "^4.1.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.0.0"
