@@ -8,12 +8,14 @@ renders different types of content in a Streamlit application.
 import traceback
 from typing import Any, Optional, Union
 
-import matplotlib.pyplot as plt
-import pandas as pd
-import plotly.graph_objects as go
 import streamlit as st
 
-from .enums import ComponentRegistry, ComponentType
+from .builtin_components import initialize_builtins
+from .enums import ComponentType
+from .registry import ComponentRegistry
+
+# Initialize built-in components
+initialize_builtins()
 
 
 class MessageComponent:
@@ -74,65 +76,15 @@ class MessageComponent:
     def _detect_component_type(self, content: Any) -> ComponentType:
         """
         Detect the appropriate component type based on content.
-
-        This method uses a combination of registered custom detectors and built-in
-        type detection logic to determine the most appropriate component type
-        for the given content.
-
-        Args:
-            content: The content to detect the type for
-
-        Returns:
-            ComponentType: The detected component type
         """
-        # First try custom detectors
-        for comp_type in ComponentRegistry._type_detectors:
+        # Try custom and builtin detectors in order
+        for comp_type in ComponentRegistry._detector_order:
             detector = ComponentRegistry.get_detector(comp_type)
             if detector and detector(content, self.kwargs):
                 return comp_type
 
-        # Then do built-in detection logic
-        if isinstance(content, (list, tuple)) and not self.kwargs.get(
-            "is_table", False
-        ):
-            return (
-                ComponentType.LIST if isinstance(content, list) else ComponentType.TUPLE
-            )
-        elif isinstance(content, dict) and not self.kwargs.get("is_json", False):
-            return ComponentType.DICT
-
-        if isinstance(content, str):
-            if self.kwargs.get("is_error", False):
-                return ComponentType.ERROR
-            elif self.kwargs.get("is_code", False):
-                return ComponentType.CODE
-            elif self.kwargs.get("is_html", False):
-                return ComponentType.HTML
-            else:
-                return ComponentType.TEXT
-        elif isinstance(content, pd.DataFrame):
-            return ComponentType.DATAFRAME
-        elif isinstance(content, pd.Series):
-            return ComponentType.SERIES
-        elif isinstance(content, plt.Figure):
-            return ComponentType.MATPLOTLIB_FIGURE
-        elif isinstance(content, go.Figure) or (
-            isinstance(content, dict)
-            and isinstance(getattr(content, "data", None), (list, tuple))
-        ):
-            return ComponentType.PLOTLY_FIGURE
-        elif isinstance(content, (int, float)) and not self.kwargs.get(
-            "is_metric", False
-        ):
-            return ComponentType.NUMBER
-        elif self.kwargs.get("is_metric", False):
-            return ComponentType.METRIC
-        elif self.kwargs.get("is_table", False):
-            return ComponentType.TABLE
-        elif isinstance(content, (dict, list)) and self.kwargs.get("is_json", False):
-            return ComponentType.JSON
-        else:
-            return ComponentType.TEXT
+        # Default fallback
+        return ComponentType.TEXT
 
     def render(self):
         """
@@ -167,7 +119,7 @@ class MessageComponent:
                 custom_renderer(self.content, self.kwargs)
                 return
 
-            # Standard component rendering
+            # Special handling for collections which recurse
             if (
                 self.component_type == ComponentType.LIST
                 or self.component_type == ComponentType.TUPLE
@@ -178,60 +130,7 @@ class MessageComponent:
                 for key, value in self.content.items():
                     self._render_collection_item(value, key)
             else:
-                if self.component_type == ComponentType.TEXT:
-                    st.markdown(self.content)
-                elif self.component_type == ComponentType.ERROR:
-                    st.error(self.content)
-                elif self.component_type == ComponentType.CODE:
-                    language = self.kwargs.get("language", "python")
-                    st.code(self.content, language=language)
-                elif self.component_type == ComponentType.DATAFRAME:
-                    use_container_width = self.kwargs.get("use_container_width", True)
-                    height = self.kwargs.get("height", None)
-                    st.dataframe(
-                        self.content,
-                        use_container_width=use_container_width,
-                        height=height,
-                    )
-                elif self.component_type == ComponentType.SERIES:
-                    st.dataframe(self.content.to_frame())
-                elif self.component_type == ComponentType.MATPLOTLIB_FIGURE:
-                    st.pyplot(self.content)
-                elif self.component_type == ComponentType.PLOTLY_FIGURE:
-                    use_container_width = self.kwargs.get("use_container_width", True)
-                    height = self.kwargs.get("height", None)
-                    st.plotly_chart(
-                        self.content,
-                        use_container_width=use_container_width,
-                        height=height,
-                    )
-                elif self.component_type == ComponentType.NUMBER:
-                    format_str = self.kwargs.get("format", None)
-                    if format_str:
-                        st.write(
-                            f"{self.title or 'Result'}: {format_str.format(self.content)}"
-                        )
-                    else:
-                        st.write(f"{self.title or 'Result'}: {self.content}")
-                elif self.component_type == ComponentType.METRIC:
-                    delta = self.kwargs.get("delta", None)
-                    delta_color = self.kwargs.get("delta_color", "normal")
-                    st.metric(
-                        label=self.title or "Metric",
-                        value=self.content,
-                        delta=delta,
-                        delta_color=delta_color,
-                    )
-                elif self.component_type == ComponentType.TABLE:
-                    st.table(self.content)
-                elif self.component_type == ComponentType.JSON:
-                    st.json(self.content)
-                elif self.component_type == ComponentType.HTML:
-                    height = self.kwargs.get("height", None)
-                    scrolling = self.kwargs.get("scrolling", False)
-                    st.html(self.content, height=height, scrolling=scrolling)
-                else:
-                    st.write(str(self.content))
+                st.write(str(self.content))
         except Exception as e:
             error_message = f"Error rendering component of type {self.component_type.value}: {str(e)}"
             stack_trace = traceback.format_exc()

@@ -1,6 +1,6 @@
 from typing import Any, Callable, List, Optional
 
-from .enums import ComponentRegistry, ComponentType
+from .enums import ComponentType
 from .messages import AssistantMessage, ErrorMessage, Message, UserMessage
 
 
@@ -138,6 +138,8 @@ class MessageHistory:
         Returns:
             ComponentType: The created component type enum value
         """
+        from .registry import ComponentRegistry
+
         return ComponentRegistry.register_component_type(name)
 
     @staticmethod
@@ -155,6 +157,8 @@ class MessageHistory:
             detector: A function that takes (content, kwargs) and returns True if
                      the content should be treated as this component type
         """
+        from .registry import ComponentRegistry
+
         ComponentRegistry.register_detector(component_type, detector)
 
     @staticmethod
@@ -171,6 +175,8 @@ class MessageHistory:
             renderer: A function that takes (content, kwargs) and renders
                      the component in the Streamlit app
         """
+        from .registry import ComponentRegistry
+
         ComponentRegistry.register_renderer(component_type, renderer)
 
     @staticmethod
