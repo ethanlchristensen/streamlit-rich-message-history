@@ -10,11 +10,10 @@ A Python package for creating rich, multi-component chat messages in Streamlit.
    installation
    usage
    api/index
-   examples
    custom_components
 
 Indices and tables
-=================
+==================
 
 * :ref:`genindex`
 * :ref:`modindex`

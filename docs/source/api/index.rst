@@ -1,5 +1,5 @@
 API Reference
-============
+=============
 
 .. toctree::
    :maxdepth: 2
@@ -7,4 +7,7 @@ API Reference
    message_history
    messages
    components
+   builtin_components
+   registry
+   mixins
    enums

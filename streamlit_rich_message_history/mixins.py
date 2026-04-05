@@ -26,51 +26,67 @@ class MessageBuilderMixin:
         return self
 
     def add_text(self, text: str, **kwargs):
+        """Add a text component to the message."""
         return self.add(text, **kwargs)
 
     def add_error(self, error_text: str, **kwargs):
+        """Add an error component to the message."""
         return self.add(error_text, is_error=True, **kwargs)
 
     def add_code(self, code: str, language: str = "python", **kwargs):
+        """Add a code block component to the message."""
         return self.add(code, is_code=True, language=language, **kwargs)
 
     def add_dataframe(self, df: pd.DataFrame, **kwargs):
+        """Add a pandas DataFrame component to the message."""
         return self.add(df, **kwargs)
 
     def add_series(self, series: pd.Series, **kwargs):
+        """Add a pandas Series component to the message."""
         return self.add(series, **kwargs)
 
     def add_matplotlib_figure(self, fig: plt.Figure, **kwargs):
+        """Add a matplotlib figure component to the message."""
         return self.add(fig, **kwargs)
 
     def add_plotly_figure(self, fig: Union[go.Figure, dict], **kwargs):
+        """Add a plotly figure component to the message."""
         return self.add(fig, **kwargs)
 
     def add_number(self, number: Union[int, float], **kwargs):
+        """Add a number component to the message."""
         return self.add(number, **kwargs)
 
     def add_metric(self, value: Any, label: Optional[str] = None, **kwargs):
+        """Add a metric component to the message."""
         return self.add(value, is_metric=True, title=label, **kwargs)
 
     def add_table(self, data: Any, **kwargs):
+        """Add a table component to the message."""
         return self.add(data, is_table=True, **kwargs)
 
     def add_json(self, data: Union[Dict, List], **kwargs):
+        """Add a JSON component to the message."""
         return self.add(data, is_json=True, **kwargs)
 
     def add_html(self, html_content: str, **kwargs):
+        """Add an HTML component to the message."""
         return self.add(html_content, is_html=True, **kwargs)
 
     def add_list(self, items: List[Any], **kwargs):
+        """Add a list component to the message."""
         return self.add(items, **kwargs)
 
     def add_tuple(self, items: Tuple[Any, ...], **kwargs):
+        """Add a tuple component to the message."""
         return self.add(items, **kwargs)
 
     def add_dict(self, items: Dict[str, Any], **kwargs):
+        """Add a dict component to the message."""
         return self.add(items, **kwargs)
 
     def add_custom(self, content: Any, component_type: str, **kwargs):
+        """Add a custom component to the message."""
         custom_type = ComponentRegistry.get_custom_type(component_type)
         if not custom_type:
             raise ValueError(f"Unknown custom component type: {component_type}")
