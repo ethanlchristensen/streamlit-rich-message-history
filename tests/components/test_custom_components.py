@@ -1,9 +1,10 @@
 from unittest.mock import MagicMock, patch
 
 from streamlit_rich_message_history.components import MessageComponent
-from streamlit_rich_message_history.enums import ComponentRegistry, ComponentType
+from streamlit_rich_message_history.enums import ComponentType
 from streamlit_rich_message_history.history import MessageHistory
 from streamlit_rich_message_history.messages import Message, UserMessage
+from streamlit_rich_message_history.registry import ComponentRegistry
 
 
 class TestCustomComponents:
@@ -42,11 +43,15 @@ class TestCustomComponents:
         else:
             ComponentRegistry._type_detectors = {}
 
-        if hasattr(ComponentRegistry, "_type_renderers"):
-            ComponentRegistry._type_renderers = {}
+        if hasattr(ComponentRegistry, "_renderers"):
+            ComponentRegistry._renderers = {}
         else:
-            ComponentRegistry._type_renderers = {}
+            ComponentRegistry._renderers = {}
 
+        if hasattr(ComponentRegistry, "_detector_order"):
+            ComponentRegistry._detector_order = []
+        else:
+            ComponentRegistry._detector_order = []
         if hasattr(Message, "_custom_component_methods"):
             Message._custom_component_methods = {}
         else:
@@ -56,7 +61,7 @@ class TestCustomComponents:
         """Restore original registry state after each test."""
         ComponentRegistry._custom_types = self._original_custom_types
         ComponentRegistry._type_detectors = self._original_type_detectors
-        ComponentRegistry._type_renderers = self._original_type_renderers
+        ComponentRegistry._renderers = self._original_type_renderers
         Message._custom_component_methods = self._original_methods
 
     def test_register_component_type(self):
